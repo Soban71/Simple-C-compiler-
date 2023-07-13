@@ -1,0 +1,87 @@
+import java_cup.runtime.*;
+
+terminal PLUS, NUMBER, MINUS,MODULO, ID, OBRACKET, CBRACKET, EQUAL, MUL, DIV,INC,DEC,ADD_ASSIGN,SUB_ASSIGN ,MUL_ASSIGN,DIV_ASSIGN,GE,LE,EE,NE,AND,OR,NOT,IF,ELSE,IFelse,SC,FOR,WHILE,OCURELY,CCURELY,DO,COLON,SWITCH,Break,Case,
+Datatype,COMMA,VOID,PRINTF,SCANF,SingleAnd,cot,Scot,ANYCHAR,Default,OSquare,CSquare,GreaterOP,LessOp,RETURN;
+
+non terminal  e, prn,ifElseStat,s,FORLOOP,WHILELOOP,DOWHILELOOP,SWITCHCASE,CASES,FUNCTION,Parameter,Dtypes,CN,print_statement,Scan_Statement,
+COMAPR,ArrayDeclaration,ArrayData,function_call,function_callParameter,VariableDeclaration,VariableList;
+
+precedence right ADD_ASSIGN,SUB_ASSIGN ,MUL_ASSIGN,DIV_ASSIGN,GE,LE,EE,NE;
+precedence right EQUAL,GreaterOP,LessOp;
+precedence left NOT,OR,AND;
+precedence left PLUS,MINUS,INC,DEC;
+precedence left MUL,DIV;
+precedence left MODULO;
+precedence left OBRACKET,CBRACKET;
+precedence left ELSE;
+precedence left IFelse;
+precedence left IF;
+precedence left RETURN;
+precedence left FOR,WHILE;
+start with s;
+s ::= ifElseStat|FORLOOP|WHILELOOP|DOWHILELOOP|SWITCHCASE|FUNCTION|e SC s|print_statement|Scan_Statement|ArrayDeclaration|VariableDeclaration|;
+e ::= 	e PLUS e|
+	e MUL e|
+        e DIV e|
+        e MINUS e|
+        e EQUAL e|
+       e MODULO e|
+        prn|
+        ID|
+        e INC e|
+        e INC|
+        e DEC e|
+        e DEC|
+        INC e|
+        DEC e|
+        ID ADD_ASSIGN e|
+        ID SUB_ASSIGN e|
+        ID MUL_ASSIGN e|
+        ID DIV_ASSIGN e|
+        e AND e|
+        e OR e|
+        e NOT e|  
+        e CN e| 
+        NUMBER |
+        RETURN e|
+        function_call
+;
+CN ::=   GE |
+         LE |
+         EE |
+         NE |
+         GreaterOP |
+        LessOp
+
+         ;
+
+
+prn ::= OBRACKET e CBRACKET;
+ArrayData ::= NUMBER COMMA ArrayData
+            | NUMBER;
+
+ifElseStat  ::= IF OBRACKET e CBRACKET OCURELY s CCURELY s| ifElseStat ELSE OCURELY s CCURELY s|
+                  ifElseStat IFelse OBRACKET e CBRACKET OCURELY s CCURELY s;
+              
+
+FORLOOP ::= FOR OBRACKET e SC e SC e CBRACKET s|FOR OBRACKET e SC e SC e CBRACKET OCURELY s CCURELY s;
+WHILELOOP ::= WHILE OBRACKET e CBRACKET s|WHILE OBRACKET e CBRACKET OCURELY s CCURELY s;
+DOWHILELOOP ::= DO OCURELY s CCURELY WHILE OBRACKET e CBRACKET SC s;  
+CASES ::= Case ID COLON s Break SC CASES|Case Scot ID Scot COLON s Break SC CASES|Default COLON s|; 
+SWITCHCASE ::= SWITCH OBRACKET e CBRACKET OCURELY CASES CCURELY s; 
+FUNCTION ::= Dtypes ID OBRACKET Parameter CBRACKET OCURELY s RETURN ID SC CCURELY s | Dtypes ID OBRACKET Parameter CBRACKET OCURELY s CCURELY s;
+Dtypes ::=Datatype|VOID;
+Parameter ::= Datatype ID |Datatype ID COMMA Parameter| ;
+COMAPR  ::= COMMA e COMAPR|COMMA SingleAnd e COMAPR | ;
+function_callParameter ::= ID COMMA function_callParameter | ID | ;
+function_call ::= ID OBRACKET function_callParameter CBRACKET;
+
+print_statement ::= PRINTF OBRACKET e CBRACKET SC s |PRINTF OBRACKET ANYCHAR CBRACKET SC s|PRINTF OBRACKET ANYCHAR COMAPR CBRACKET SC s;
+Scan_Statement ::=  SCANF OBRACKET e CBRACKET SC s  |SCANF OBRACKET ANYCHAR CBRACKET SC s |SCANF OBRACKET ANYCHAR COMAPR CBRACKET SC s;
+
+ArrayDeclaration ::= Dtypes ID OSquare ID CSquare EQUAL OCURELY ArrayData CCURELY SC;
+VariableDeclaration ::= Dtypes VariableList SC s|Dtypes VariableList EQUAL NUMBER SC s | Dtypes ID EQUAL e SC s;
+VariableList ::= ID COMMA VariableList
+               | ID;
+
+
